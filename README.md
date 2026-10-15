@@ -6,9 +6,10 @@
 ![ggplot2](https://img.shields.io/badge/ggplot2-3.4+-1f4257?logo=tidyverse&logoColor=white)
 ![Status](https://img.shields.io/badge/status-en%20desarrollo-yellow)
 
+![Pirámide poblacional de Hidalgo](img/01_piramide.png "Ejemplo: municipio 001")
 ---
 
-## 📑 Tabla de contenidos
+##  Tabla de contenidos
 
 1. [Descripción](#-descripción)
 2. [Requisitos](#-requisitos)
@@ -33,7 +34,8 @@ Este repositorio contiene el código y los insumos necesarios para **construir, 
 
 ---
 
-## ⚙️ Requisitos
+## <img width="3000" height="2100" alt="01_piramide" src="https://github.com/user-attachments/assets/fd8fa9a7-71a2-49c8-a3e6-618353cf4d2c" />
+ Requisitos
 
 - **R ≥ 4.2** (probado con 4.3)
 - **RStudio** (recomendado; el flujo está pensado para trabajar en él)
