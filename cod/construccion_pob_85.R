@@ -1,8 +1,19 @@
 library(dplyr)
-"datos/eic_micro_municipio.csv" |> read.csv() -> micro_eic2025
+library(zoo)
+library(stringr)
 
-eic2025<- eic2025 |> dplyr::filter(CVE_ENT == 13, ESTIMADOR == "Valor")
-names(eic2025)
+inegi<-readxl::read_xlsx("dat/eic2025_poblacion_13.xlsx",sheet = 3)
+names(inegi) = paste(
+  inegi[5,] |> as.vector() |>  
+    zoo::na.locf(na.rm = T) |>  
+    unlist() |>  
+    as.character(), 
+  inegi[6,]
+) |> gsub(pattern = "NA", replacement = " ") |> 
+  stringr::str_squish()
+inegi<- inegi |>  dplyr::filter(!is.na(Municipio))
+inegi<- inegi |> dplyr::slice(-1)
+inegi<- inegi |> dplyr::filter(Estimador=="Valor")
 
 etiquetas_inegi <- c(
   "00-04 años", "05-09 años", "10-14 años", "15-19 años",
@@ -11,6 +22,7 @@ etiquetas_inegi <- c(
   "60-64 años", "65-69 años", "70-74 años", "75 años y más"
 )
 
+micro_eic2025 <- "dat/eic_micro_municipio.csv" |> read.csv()
 micro_eic2025 <- micro_eic2025[,-1]
 micro_eic2025<- micro_eic2025 |>  dplyr::mutate(SEXO = dplyr::case_when(
   SEXO == 1 ~ "hombres",

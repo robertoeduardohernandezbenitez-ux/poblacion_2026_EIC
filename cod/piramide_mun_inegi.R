@@ -4,8 +4,8 @@ library(tidyr)
 library(stringr)
 library(readxl)
 library(zoo)
-inegi<-readxl::read_xlsx("datos/eic2025_poblacion_13.xlsx",sheet = 3)
-names(inegi) = paste(
+inegi<-readxl::read_xlsx("dat/eic2025_poblacion_13.xlsx",sheet = 3)
+  names(inegi) = paste(
   inegi[5,] |> as.vector() |>  
     zoo::na.locf(na.rm = T) |>  
     unlist() |>  
@@ -164,7 +164,7 @@ ggplot(piramide, aes(x = edad, y = poblacion_plot)) +
   )
 
 ggsave(
-  filename = "piramidesxmunicipio/piramide_acaxochitlan.png",
+  filename = "piramides_mun/piramide_acaxochitlan.png",
   plot     = p,
   width    = 8,      # pulgadas
   height   = 6,
@@ -181,7 +181,7 @@ library(stringr)
 library(ggnewscale)
 
 # 0. Configuración global
-dir_salida <- "piramidexmunicipio"
+dir_salida <- "piramides_mun"
 dir.create(dir_salida, showWarnings = FALSE)
 
 niveles_edad <- unique(inegi$`Grupos quinquenales de edad`)

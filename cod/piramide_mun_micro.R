@@ -1,6 +1,6 @@
 # construccion de piramide hasta +85 años de edad -------------------------
 library(dplyr)
-"datos/eic_micro_municipio.csv" |> read.csv() -> micro_eic2025
+"dat/eic_micro_municipio.csv" |> read.csv() -> micro_eic2025
 
 etiquetas_piram <- c( #Etiquetas para cada grupo quinquenal hasta los 85 años
   "00-04 años", "05-09 años", "10-14 años", "15-19 años",
