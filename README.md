@@ -4,7 +4,6 @@
 
 ![R](https://img.shields.io/badge/R-%3E%3D%204.2-276DC3?logo=r&logoColor=white)
 ![ggplot2](https://img.shields.io/badge/ggplot2-3.4+-1f4257?logo=tidyverse&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green)
 ![Status](https://img.shields.io/badge/status-en%20desarrollo-yellow)
 
 ---
@@ -18,11 +17,11 @@
 5. [Uso rápido](#-uso-rápido)
 6. [Roadmap](#-roadmap)
 7. [Notas metodológicas](#-notas-metodológicas)
-8. [Autor y licencia](#-autor-y-licencia)
+8. [Autor](#-autor)
 
 ---
 
-## 🧭 Descripción
+##  Descripción
 
 Este repositorio contiene el código y los insumos necesarios para **construir, graficar y exportar** pirámides poblacionales municipales usando `ggplot2`, con las siguientes características:
 
@@ -43,31 +42,30 @@ Este repositorio contiene el código y los insumos necesarios para **construir, 
 ```r
 install.packages(c(
   "dplyr", "tidyr", "ggplot2", "stringr",
-  "purrr", "ggnewscale", "scales"
+  "purrr", "ggnewscale", "scales","readxl"
 ))
 ```
 
 ---
 
-## 📂 Estructura del proyecto
+##  Estructura del proyecto
 
 ```
 poblacion_2026_EIC/
-├── datos/
+├── dat/
 │   ├── eic_micro_municipio.csv        # microdatos EIC 2026
 │   └── inegi_grupos_quinquenales.csv  # datos agregados INEGI
-├── R/
+├── cod/
 │   ├── piramides_mun_inegi.R          # v1: datos agregados INEGI
 │   ├── construccion_pob_85.R          # reconstrucción desde microdatos
 │   └── piramides_mun_micro.R          # v2 (principal): desde microdatos
-├── salida/                            # PNGs generados (no versionado)
-├── README.md
-└── LICENSE
+├── piramides_mun                      # Graficas de la poblacion por municipio                     
+└── README.md
 ```
 
 ---
 
-## 🔄 Flujo de trabajo
+## Flujo de trabajo
 
 El proyecto evolucionó en tres etapas. Cada script es **autocontenido** y puede ejecutarse por separado.
 
@@ -79,17 +77,17 @@ Procesamiento incremental en 4 pasos:
 3. **Pirámide con gradiente** proporcional al peso del grupo quinquenal.
 4. **Esquematización** para procesar los 84 municipios de Hidalgo.
 
-> ⚠️ **Limitación**: los datos agregados de INEGI 2026 agrupan la población a partir de **75 años y más**, por lo que la pirámide se detiene ahí. El código funciona correctamente si ese agrupamiento es aceptable para tu análisis.
+>  **Limitación**: los datos agregados de INEGI 2026 agrupan la población a partir de **75 años y más**, por lo que la pirámide se detiene ahí. El código funciona correctamente si ese agrupamiento es aceptable para su análisis.
 
 ### 2. `construccion_pob_85.R` — reconstrucción desde microdatos
 Recalcula la población por grupo quinquenal **hasta 85 años y más** a partir de los microdatos, y **valida** que la reconstrucción coincida con los datos agregados de INEGI.
 
-### 3. `piramides_mun_micro.R` — versión principal ⭐
-Toma los microdatos ya procesados y genera las pirámides definitivas (hasta 85+) para cada municipio, con exportación transparente a `salida/`.
+### 3. `piramides_mun_micro.R` — versión principal 
+Toma los microdatos ya procesados y genera las pirámides definitivas (hasta 85+) para cada municipio, con exportación en formato PNG transparentes a `salida/`.
 
 ---
 
-## 🚀 Uso rápido
+##  Uso rápido
 
 ```r
 # 1. Cargar microdatos y etiquetas
@@ -122,18 +120,18 @@ municipios_micro <- micro_eic2025 |>
 source("R/piramides_mun_micro.R")
 ```
 
-Los PNG se guardan en `salida/` con el formato:
+Los PNG se guardan en `piramides_mun/` con el formato:
 
 ```
 salida/
-├── 001_piramide.png
-├── 002_piramide.png
+├── 1_piramide.png
+├── 2_piramide.png
 └── ...
 ```
 
 ---
 
-## 🗺️ Roadmap
+##  Roadmap
 
 - [x] Pirámide básica con `ggplot2`
 - [x] Gradiente proporcional al peso del grupo
@@ -142,29 +140,26 @@ salida/
 - [x] Procesamiento por lotes de municipios
 - [x] Extensión hasta 85 años y más vía microdatos
 - [ ] Versión parametrizable por estado (`--estado`)
-- [ ] Reporte HTML con `Rmarkdown` / `Quarto`
-- [ ] Tests con `testthat` para validar sumas contra INEGI
 
 ---
 
-## 📝 Notas metodológicas
+##  Notas metodológicas
 
 - **Factor de expansión**: se usa `FACTOR` para ponderar cada registro de los microdatos.
 - **Edad desconocida**: se descartan los registros con `EDAD == 999`.
+- **Reasignar etiqueta por sexo**: a partir de la clave `SEXO==1` para hombres y `SEXO==3` para mujeres
 - **Cálculo de porcentajes**: se hace **dentro de cada sexo**, de modo que hombres y mujeres suman 100 % por separado. Esto permite comparar la estructura por edades **entre sexos** sin que el tamaño absoluto de cada grupo domine la lectura.
 - **Validación**: la reconstrucción desde microdatos se contrasta contra los datos agregados de INEGI para garantizar consistencia.
 - **Transparencia**: todos los gráficos se exportan con `bg = "transparent"` y con `panel.background`, `plot.background` y leyendas sin relleno.
 
 ---
 
-## 👤 Autor y licencia
+##  Autor
 
-Proyecto desarrollado por **[Tu nombre]** · [tu@correo]
-
-Distribuido bajo licencia **MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+Proyecto desarrollado por **[Roberto]**.
 
 ---
 
 <p align="center">
-  <em>Hecho con ❤️ y R · Hidalgo, 2026</em>
+  <em>Hecho por el Departamento de Geoestadistica y R · Hidalgo, 2026</em>
 </p>
