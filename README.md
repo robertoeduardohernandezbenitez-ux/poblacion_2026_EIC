@@ -33,8 +33,6 @@ Este repositorio contiene el código y los insumos necesarios para **construir, 
 - Procesamiento **esquemático** de todos los municipios en un solo bucle.
 
 ---
-
-## <img width="3000" height="2100" alt="01_piramide" src="https://github.com/user-attachments/assets/fd8fa9a7-71a2-49c8-a3e6-618353cf4d2c" />
  Requisitos
 
 - **R ≥ 4.2** (probado con 4.3)
