@@ -1,6 +1,5 @@
 # construccion de piramide hasta +85 años de edad -------------------------
 library(dplyr)
-"dat/eic_micro_municipio.csv" |> read.csv() -> micro_eic2025
 
 etiquetas_piram <- c( #Etiquetas para cada grupo quinquenal hasta los 85 años
   "00-04 años", "05-09 años", "10-14 años", "15-19 años",
@@ -9,14 +8,17 @@ etiquetas_piram <- c( #Etiquetas para cada grupo quinquenal hasta los 85 años
   "60-64 años", "65-69 años", "70-74 años", "75-79 años",
   "80-85 años", "85 años y más"
 )
+
+"dat/eic_micro_municipio.csv" |> read.csv() -> micro_eic2025
 micro_eic2025 <- micro_eic2025[,-1] #Elimino columna con la clave del estado (13 = Hidalgo)
 micro_eic2025<- micro_eic2025 |>  
-  dplyr::mutate(SEXO = dplyr::case_when(SEXO == 1 ~ "hombres",
-                                        SEXO == 3 ~ "mujeres")) |>#Se cambia la etiqueta numerica por la del genero
+  dplyr::mutate(SEXO = dplyr::case_when(
+    SEXO == 1 ~ "hombres",
+    SEXO == 3 ~ "mujeres")) |>#Se cambia la etiqueta numerica por la de genero
   dplyr::rename(sexo=SEXO)
 
 micro_eic2025 |>
-  filter(EDAD != 999) |> #se eliminan datos no especificados 
+  dplyr::filter(EDAD != 999) |> #se eliminan datos no especificados 
   dplyr::mutate(grup_quin = cut(EDAD, breaks = c(seq(0, 85, 5),Inf), right = FALSE, labels = etiquetas_piram)) |>
  #Se crean los grupos quinquenales en intervalos [k:k+5) con el grupo de +85 absorviendo el resto del a poblacion
   dplyr::group_by(CVE_MUN, sexo, grup_quin, .drop = FALSE) |>

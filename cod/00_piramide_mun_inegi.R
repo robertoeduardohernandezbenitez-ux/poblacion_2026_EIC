@@ -4,18 +4,18 @@ library(tidyr)
 library(stringr)
 library(readxl)
 library(zoo)
+# Preparar excel ----------------------------------------------------------
+
 inegi<-readxl::read_xlsx("dat/eic2025_poblacion_13.xlsx",sheet = 3)
-  names(inegi) = paste(
-  inegi[5,] |> as.vector() |>  
-    zoo::na.locf(na.rm = T) |>  
-    unlist() |>  
-    as.character(), 
-  inegi[6,]
-) |> gsub(pattern = "NA", replacement = " ") |> 
+names(inegi) = paste(inegi[5,] |> as.vector() |> zoo::na.locf(na.rm = T) |> unlist() |> as.character(), 
+  inegi[6,]) |> 
+  gsub(pattern = "NA", replacement = " ") |> 
   stringr::str_squish()
+
 inegi<- inegi |>  dplyr::filter(!is.na(Municipio))
 inegi<- inegi |> dplyr::slice(-1)
 inegi<- inegi |> dplyr::filter(Estimador=="Valor")
+inegi[5,] |> as.vector() |>  zoo::na.locf() |> unlist() |> as.character()
 
 # Resumen estadistico -----------------------------------------------------
 inegi |>  dplyr::mutate(pob = as.numeric(`Población total en viviendas particulares habitadas`)) |> 
